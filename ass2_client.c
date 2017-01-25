@@ -14,11 +14,11 @@
 #include <fcntl.h> /* Added for the nonblocking socket */
 #define BUF_SZ 500
 int sockfd;
-/*--------------------------------------------------------------
-|	Function to handle ctrl+c (termination) of client      |
+/*---------------------------------------------------------
+|	Function to handle ctrl+c (termination) of client	   |
 |	input- int                                             |
 |	output- void                                           |
-----------------------------------------------------------------*/
+-----------------------------------------------------------*/
 void sighandler(int sig_num)
 {	
 		
@@ -54,7 +54,7 @@ int main(){
 	if(connect(sockfd,(struct sockaddr *) &servaddr,sizeof(servaddr))== -1) {perror("connect: "); return 0;}
 	
 	n = read(sockfd,buffer,BUF_SZ);
-	if(strcmp(buffer,"Connection Limited Exceeded")==0){
+	if(strcmp(buffer,"CONNECTION LIMIT EXCEEDED\n")==0){
 		printf("%s\n", buffer);
 		exit(0);
 	}

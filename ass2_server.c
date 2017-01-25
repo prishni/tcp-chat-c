@@ -10,6 +10,8 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <time.h>
+#include <sys/wait.h>
+#include <semaphore.h>
 #include <poll.h>
 #include  <signal.h>
 #include <fcntl.h>        /* Added for the nonblocking socket */
@@ -34,6 +36,18 @@ struct message{
 	char r_name[30];
 	char msg[BUF_SZ];
 };
+/*---------------------------------------------------------
+|	Function to handle ctrl+c (termination) of server	   |
+|	input- int                                             |
+|	output- void                                           |
+-----------------------------------------------------------*/
+void sighandler(int sig_num)
+{	
+		char buffer[BUF_SZ];
+		printf("\r%c[2K",27);
+        sem_unlink("/qsem");
+        exit(0);
+}
 /*--------------------------------------------------------------
 |	generates a randon number in the range [0,RAND_MAx]    |
 |	input- NULL                                            |
@@ -66,7 +80,7 @@ int checkQueue(struct message *msg_queue,int *front,char *myCliName){
 /*--------------------------------------------------------------
 |	checks if the destination client exixts                |
 |	input- destination client's name, array of all         |
-|		   connected clients                           |
+|		   connected clients                               |
 |	output- int (1 if client exists, 0 otherwise)          |
 ----------------------------------------------------------------*/
 int checkIfSrcExists(char *dest_name,int no_of_server,struct clientInfo clients[]){
@@ -79,7 +93,7 @@ int checkIfSrcExists(char *dest_name,int no_of_server,struct clientInfo clients[
 /*--------------------------------------------------------------
 |	checks if the clients tries to ping itself             |
 |	input- destination client's name, source client's      |
-|		   name                                        |
+|		   name                                            |
 |	output- int (1 if client pings itself, 0 otherwise)    |
 ----------------------------------------------------------------*/
 int ifMsgToItself(char *dest_name,char *src_name){
@@ -87,7 +101,7 @@ int ifMsgToItself(char *dest_name,char *src_name){
 	return 0;
 }
 /*--------------------------------------------------------------
-|	dequeues message form queue      	               |
+|	dequeues message form queue      	                   |
 |	input- front & rear pointers, msg queue                |
 |	output- dequeued message                               |
 ----------------------------------------------------------------*/
@@ -150,15 +164,15 @@ void showUsers(struct clientInfo clients[],int no_of_server,int newsock_fd,int m
 |   broadcasts "disconnecting" msg to all connected      |
 |   clients when any client disconnects                  |
 |   Input- array of connected clients,front & rear       |
-|		   pointers, msg_queue                   |
+|		   pointers, msg_queue                           |
 |    Output- void                                        |
 ----------------------------------------------------------*/
-void broadcast(struct clientInfo clients[],int no_of_server,char *myCliName,int *front, int *rear,  struct message *msg_queue){
+void broadcast(struct clientInfo clients[],int no_of_server,char *myCliName,int *front,int *rear,struct message *msg_queue,char *msg,int myid){
 	struct message m;
 	strcpy(m.s_name,myCliName);
-	strcpy(m.msg,"IS DISCONNECTED");
+	strcpy(m.msg,msg);
 	for(int i=1;i<=no_of_server;i++){
-		if(clients[i].id !=-1){
+		if((clients[i].id != -1) && (clients[i].id != myid) ){
 			strcpy(m.r_name,clients[i].name);
 			enqueue(front,rear,msg_queue,m);
 		}
@@ -166,7 +180,7 @@ void broadcast(struct clientInfo clients[],int no_of_server,char *myCliName,int 
 }
 
 int main(){
-	
+
 	int port_no = 5000;
 	int sock_fd = socket(AF_INET,SOCK_STREAM,0);
 	if(sock_fd ==-1){printf("error:socket formation\n"); return 0;}
@@ -183,7 +197,6 @@ int main(){
 	/*client information*/
 	struct sockaddr_in clientaddr;
 	socklen_t c_len = sizeof(clientaddr);
-	//int *no_of_server=0;
 
 	int shmid = shmget(IPC_PRIVATE,sizeof(int)*1, IPC_CREAT | 0666);
 	int *front =(int *)shmat(shmid,NULL,0);
@@ -198,7 +211,9 @@ int main(){
 	*no_of_server=0;
 	*front =-1;
 	*rear =-1;
+	sem_t *qsem = sem_open("/qsem",O_CREAT|O_EXCL,0644,1);
 	
+	signal(SIGINT, sighandler);
 	for(;;)
 	{
 		int newsock_fd = accept(sock_fd,(struct sockaddr *)&clientaddr , &c_len );
@@ -217,88 +232,116 @@ int main(){
 			bzero(buffer,BUF_SZ);
 			close(newsock_fd);
 		}
-		(*no_of_server)++;
-		
-		pid_t pid =fork();
-		if(pid == -1){
-			close(newsock_fd);
-			continue;
-		}
-		if(pid > 0){							//Parent
-			close(newsock_fd);
-			continue;
-		}
-		if(pid == 0){							//Child
-			int n;
-			int myclient = *no_of_server;
-			char myCliName[30] ="client";
-			clients[*no_of_server].id=generateClientid()%100;
-			char temp[5];
-			sprintf(temp,"%d",myclient);
-			strcat(myCliName,temp);
-			strcpy(clients[*no_of_server].name,myCliName);
-			clients[*no_of_server].fd=newsock_fd;
-			clients[*no_of_server].timestamp= time(NULL);
-			sprintf(buffer,"\n WELCOME, YOU ARE CONNECTED \n ID = %d\n NAME = %s \n TIME STAMP = %s ",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
-			n = write(newsock_fd,buffer,BUF_SZ);
-			bzero(buffer,BUF_SZ);
-			printf("A client connected with\n Id = %d\n Name = %s \n TimeStamp = %s\n",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
-			//showUsers(clients,*no_of_server,newsock_fd,clients[myclient].id);
-			while(1){
-					n = read(newsock_fd,buffer,BUF_SZ);
-					if(n>0){
-						if(strncmp("showUsers\n",buffer,BUF_SZ)==0){
-							bzero(buffer,BUF_SZ);
-							showUsers(clients,*no_of_server,newsock_fd,clients[myclient].id);
-						}
-						else if(strncmp("-1",buffer,BUF_SZ)==0){
-							printf("%s with id %d is disconnected\n\n",myCliName,clients[myclient].id);
-							clients[myclient].id =-1;
-							bzero(buffer,BUF_SZ);
-							broadcast(clients,*no_of_server,myCliName,front,rear,msg_queue);
-							close(sock_fd);
-							return 0;
-						}
-						else{
-							int index= strcspn(buffer,":");
-							struct message m;
-							char *src_name = myCliName;
-							char dest_name[30],msg[BUF_SZ];
-							memcpy(dest_name,&buffer,index);
-							sprintf(msg,"%s",buffer+index+1);
-							msg[strlen(msg)-1]='\0';
-							dest_name[index]='\0';
-							strcpy(m.msg,msg);
-							strcpy(m.s_name,src_name);
-							strcpy(m.r_name,dest_name);
-							m.s_id=-1;
-							m.r_id=-1;
-							
-							if(ifMsgToItself(dest_name,src_name)){
-								sprintf(buffer,"%s","YOU CANNOT PING YOURSELF\n");
-								write(newsock_fd,buffer,BUF_SZ);
+		else{ 
+			(*no_of_server)++;
+			
+			pid_t pid =fork();
+			if(pid == -1){
+				close(newsock_fd);
+				continue;
+			}
+			if(pid > 0){							//Parent
+				close(newsock_fd);
+				continue;
+			}
+			if(pid == 0){							//Child
+				int n;
+				int myclient = *no_of_server;
+				char myCliName[30] ="client";
+				clients[*no_of_server].id=generateClientid()%100;
+				char temp[5];
+				sprintf(temp,"%d",myclient);
+				strcat(myCliName,temp);
+				strcpy(clients[*no_of_server].name,myCliName);
+				clients[*no_of_server].fd=newsock_fd;
+				clients[*no_of_server].timestamp= time(NULL);
+				sprintf(buffer,"\n WELCOME, YOU ARE CONNECTED \n ID = %d\n NAME = %s \n TIME STAMP = %s ",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
+				n = write(newsock_fd,buffer,BUF_SZ);
+				bzero(buffer,BUF_SZ);
+				printf("A client connected with\n Id = %d\n Name = %s \n TimeStamp = %s\n",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
+				while(1){
+						n = read(newsock_fd,buffer,BUF_SZ);
+						//if client has provided data on cmd
+						if(n>0){
+							if(strncmp("showUsers\n",buffer,BUF_SZ)==0){
+								bzero(buffer,BUF_SZ);
+								showUsers(clients,*no_of_server,newsock_fd,clients[myclient].id);
+							}
+							if(strncmp("broadcast:",buffer,strlen("broadcast:"))==0){
+								char msg[BUF_SZ];
+								sprintf(msg,"%s\n",buffer+strlen("broadcast:"));
+								broadcast(clients,*no_of_server,myCliName,front,rear,msg_queue,msg,clients[myclient].id);
 								bzero(buffer,BUF_SZ);
 							}
-							else if(checkIfSrcExists(dest_name,*no_of_server,clients)){
-								enqueue(front,rear,msg_queue,m);
+							else if(strncmp("-1",buffer,BUF_SZ)==0){
+								printf("%s with id %d is disconnected\n\n",myCliName,clients[myclient].id);
+								clients[myclient].id =-1;
+								bzero(buffer,BUF_SZ);
+								char msg[30]= "IS DISCONNECTED\n";
+								broadcast(clients,*no_of_server,myCliName,front,rear,msg_queue,msg,clients[myclient].id);
+								close(sock_fd);
+								return 0;
 							}
 							else{
-								sprintf(buffer,"%s","THIS CLIENT DOESNOT EXISTS\n");
+								if(!strchr(buffer,':')){
+									sprintf(buffer,"%s","please provide text in this format client_name: <msg>\n");
+									write(newsock_fd,buffer,BUF_SZ);
+									bzero(buffer,BUF_SZ);
+								}
+								else{
+									int index= strcspn(buffer,":");
+									if(index==0){
+										sprintf(buffer,"%s","please provide a client name\n");
+										write(newsock_fd,buffer,BUF_SZ);
+										bzero(buffer,BUF_SZ);
+									}
+									else{
+										struct message m;
+										char *src_name = myCliName;
+										char dest_name[30],msg[BUF_SZ];
+										memcpy(dest_name,&buffer,index);
+										sprintf(msg,"%s",buffer+index+1);
+										//msg[strlen(msg)-1]='\0';
+										dest_name[index]='\0';
+										strcpy(m.msg,msg);
+										strcpy(m.s_name,src_name);
+										strcpy(m.r_name,dest_name);
+										m.s_id=-1;
+										m.r_id=-1;
+										
+										if(ifMsgToItself(dest_name,src_name)){
+											sprintf(buffer,"%s","YOU CANNOT PING YOURSELF\n");
+											write(newsock_fd,buffer,BUF_SZ);
+											bzero(buffer,BUF_SZ);
+										}
+										else if(checkIfSrcExists(dest_name,*no_of_server,clients)){
+											sem_wait(qsem);
+											enqueue(front,rear,msg_queue,m);
+											sem_post(qsem);
+										}
+										else{
+											sprintf(buffer,"%s","THIS CLIENT DOESNOT EXISTS OR IS NO MORE ONLINE\n");
+											write(newsock_fd,buffer,BUF_SZ);
+											bzero(buffer,BUF_SZ);
+										}
+									}
+								}
+							}
+						}
+						//if client has not provided any command
+						else {
+							sem_wait(qsem);
+							if(checkQueue(msg_queue,front,myCliName)){
+								struct message m =dequeue(front,rear,msg_queue);
+								sprintf(buffer,"%s: %s",m.s_name, m.msg);
 								write(newsock_fd,buffer,BUF_SZ);
 								bzero(buffer,BUF_SZ);
 							}
+							sem_post(qsem);
 						}
-					}
-					else {
-						if(checkQueue(msg_queue,front,myCliName)){
-							struct message m =dequeue(front,rear,msg_queue);
-							sprintf(buffer,"%s: \"%s\" \n",m.s_name, m.msg);
-							write(newsock_fd,buffer,BUF_SZ);
-							bzero(buffer,BUF_SZ);
-						}
-					}
-			}
-			break;
+				}
+				break;
+			}	
 		}
 	}
 	close(sock_fd);
