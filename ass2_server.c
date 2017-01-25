@@ -146,6 +146,13 @@ void showUsers(struct clientInfo clients[],int no_of_server,int newsock_fd,int m
 		bzero(buffer,BUF_SZ);
 	}
 }
+/*---------------------------------------------------
+|	broadcasts "disconnecting" msg to all connected  |
+|   clients when any client disconnects              |
+|	Input- array of connected clients,front & rear   |
+|		   pointers, msg_queue                       |
+|	Output- void                                     |
+----------------------------------------------------*/
 void broadcast(struct clientInfo clients[],int no_of_server,char *myCliName,int *front, int *rear,  struct message *msg_queue){
 	struct message m;
 	strcpy(m.s_name,myCliName);
