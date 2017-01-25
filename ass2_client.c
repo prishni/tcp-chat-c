@@ -24,7 +24,7 @@ void sighandler(int sig_num)
 		
 		printf("in sig handler\n");
 		char buffer[BUF_SZ];
-		printf("\r%c[2K",27);
+		printf("27[1A\r%c[2K\r",27);
         sprintf(buffer, "%s", "-1");
         int n = write(sockfd,buffer,BUF_SZ);
 		bzero(buffer,BUF_SZ);
@@ -82,6 +82,10 @@ int main(){
 				else if(i==1){
 					//take user input and send to the server
 					getline(&input,&size,stdin);
+					if(!(strcmp(input,"showUsers\n")==0) && !(strcmp(input,"broadcast\n")==0)){
+						printf("27[2A%c[2K\r", 27);
+						printf("                   %s\n", input);
+					}
 					sprintf(buffer, "%s", input);
 					n = write(sockfd,buffer,BUF_SZ);
 					bzero(buffer,BUF_SZ);

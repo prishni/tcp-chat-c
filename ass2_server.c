@@ -123,10 +123,12 @@ struct message dequeue(int *front, int *rear, struct message *msg_queue){
 |	input- front & rear pointers, msg queue ,message  m    |
 |	output- void                                           |
 ----------------------------------------------------------------*/
-void enqueue(int *front, int *rear,  struct message *msg_queue,struct message m){
+void enqueue(int *front, int *rear,  struct message *msg_queue,struct message m,FILE *fp){
 	if(*rear ==99) return;
 	else{
 		msg_queue[(*rear)+1] = m;
+		time_t tm =time(NULL);
+		fprintf(fp, "Sender: %s , Receiver: %s , Time Stamp %s Message : %s",m.s_name,m.r_name,ctime(&tm),m.msg);
 		(*rear)++;
 		if(*front == -1) *front =0;
 	}
@@ -167,14 +169,14 @@ void showUsers(struct clientInfo clients[],int no_of_server,int newsock_fd,int m
 |		   pointers, msg_queue                           |
 |    Output- void                                        |
 ----------------------------------------------------------*/
-void broadcast(struct clientInfo clients[],int no_of_server,char *myCliName,int *front,int *rear,struct message *msg_queue,char *msg,int myid){
+void broadcast(struct clientInfo clients[],int no_of_server,char *myCliName,int *front,int *rear,struct message *msg_queue,char *msg,int myid,FILE *fp){
 	struct message m;
 	strcpy(m.s_name,myCliName);
 	strcpy(m.msg,msg);
 	for(int i=1;i<=no_of_server;i++){
 		if((clients[i].id != -1) && (clients[i].id != myid) ){
 			strcpy(m.r_name,clients[i].name);
-			enqueue(front,rear,msg_queue,m);
+			enqueue(front,rear,msg_queue,m,fp);
 		}
 	}
 }
@@ -212,7 +214,7 @@ int main(){
 	*front =-1;
 	*rear =-1;
 	sem_t *qsem = sem_open("/qsem",O_CREAT|O_EXCL,0644,1);
-	
+	FILE *fp =fopen("serverlog.txt","w");
 	signal(SIGINT, sighandler);
 	for(;;)
 	{
@@ -259,6 +261,7 @@ int main(){
 				n = write(newsock_fd,buffer,BUF_SZ);
 				bzero(buffer,BUF_SZ);
 				printf("A client connected with\n Id = %d\n Name = %s \n TimeStamp = %s\n",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
+				//fprintf(fp,"A client connected with\n Id = %d\n Name = %s \n TimeStamp = %s\n",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
 				while(1){
 						n = read(newsock_fd,buffer,BUF_SZ);
 						//if client has provided data on cmd
@@ -270,15 +273,16 @@ int main(){
 							if(strncmp("broadcast:",buffer,strlen("broadcast:"))==0){
 								char msg[BUF_SZ];
 								sprintf(msg,"%s\n",buffer+strlen("broadcast:"));
-								broadcast(clients,*no_of_server,myCliName,front,rear,msg_queue,msg,clients[myclient].id);
+								broadcast(clients,*no_of_server,myCliName,front,rear,msg_queue,msg,clients[myclient].id,fp);
 								bzero(buffer,BUF_SZ);
 							}
 							else if(strncmp("-1",buffer,BUF_SZ)==0){
 								printf("%s with id %d is disconnected\n\n",myCliName,clients[myclient].id);
+								//fprintf(fp,"%s with id %d is disconnected\n\n",myCliName,clients[myclient].id);
 								clients[myclient].id =-1;
 								bzero(buffer,BUF_SZ);
 								char msg[30]= "IS DISCONNECTED\n";
-								broadcast(clients,*no_of_server,myCliName,front,rear,msg_queue,msg,clients[myclient].id);
+								broadcast(clients,*no_of_server,myCliName,front,rear,msg_queue,msg,clients[myclient].id,fp);
 								close(sock_fd);
 								return 0;
 							}
@@ -316,7 +320,7 @@ int main(){
 										}
 										else if(checkIfSrcExists(dest_name,*no_of_server,clients)){
 											sem_wait(qsem);
-											enqueue(front,rear,msg_queue,m);
+											enqueue(front,rear,msg_queue,m,fp);
 											sem_post(qsem);
 										}
 										else{
@@ -345,5 +349,6 @@ int main(){
 		}
 	}
 	close(sock_fd);
+	fclose(fp);
 	return 0;
 }
