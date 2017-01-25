@@ -14,11 +14,11 @@
 #include <fcntl.h> /* Added for the nonblocking socket */
 #define BUF_SZ 500
 int sockfd;
-/*---------------------------------------------------------
-|	Function to handle ctrl+c (termination) of client	   |
+/*--------------------------------------------------------------
+|	Function to handle ctrl+c (termination) of client      |
 |	input- int                                             |
 |	output- void                                           |
------------------------------------------------------------*/
+----------------------------------------------------------------*/
 void sighandler(int sig_num)
 {	
 		
