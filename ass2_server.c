@@ -17,7 +17,7 @@
 #define MAX_CLIENTS 5     /*max number of clients that can be connected*/
 
 /*---------------------------------------------------------
-|	structure to store all connected clients information  |
+|   structure to store all connected clients information   |
 -----------------------------------------------------------*/
 struct clientInfo{
 	int id;
@@ -26,7 +26,7 @@ struct clientInfo{
 	time_t timestamp;
 };
 /*----------------------------------------------------------
-|	structure to store messages       	                   |
+|	structure to store messages       	           |
 -----------------------------------------------------------*/
 struct message{
 	int s_id,r_id;
@@ -34,41 +34,41 @@ struct message{
 	char r_name[30];
 	char msg[BUF_SZ];
 };
-/*---------------------------------------------------------
-|	generates a randon number in the range [0,RAND_MAx]	   |
+/*--------------------------------------------------------------
+|	generates a randon number in the range [0,RAND_MAx]    |
 |	input- NULL                                            |
 |	output- int                                            |
------------------------------------------------------------*/
+----------------------------------------------------------------*/
 int generateClientid(){
 	srand ( time(NULL) );
   	int random_number = rand();
   	return random_number;
 }
-/*---------------------------------------------------------
-|	generates a randon name for the client          	   |
+/*--------------------------------------------------------------
+|	generates a randon name for the client                 |
 |	input- NULL                                            |
 |	output- char array                                     |
------------------------------------------------------------*/
+----------------------------------------------------------------*/
 char * generateClientname(){
 
 }
-/*---------------------------------------------------------
-|	checks if there is message for client in yhe queue	   |
+/*--------------------------------------------------------------
+|	checks if there is message for client in yhe queue     |
 |	input- msg queue,front pointer, client name(self)      |
 |	output- int                                            |
------------------------------------------------------------*/
+----------------------------------------------------------------*/
 int checkQueue(struct message *msg_queue,int *front,char *myCliName){
 	struct message m = msg_queue[*front];
 	if(strcmp(m.r_name,myCliName)==0)
 		return 1;
 	return 0;
 }
-/*---------------------------------------------------------
-|	checks if the destination client exixts          	   |
+/*--------------------------------------------------------------
+|	checks if the destination client exixts                |
 |	input- destination client's name, array of all         |
-|		   connected clients                               |
+|		   connected clients                           |
 |	output- int (1 if client exists, 0 otherwise)          |
------------------------------------------------------------*/
+----------------------------------------------------------------*/
 int checkIfSrcExists(char *dest_name,int no_of_server,struct clientInfo clients[]){
 	for(int i=1;i<=no_of_server;i++){
 		if((strcmp(dest_name,clients[i].name)==0) && clients[i].id !=-1)
@@ -76,21 +76,21 @@ int checkIfSrcExists(char *dest_name,int no_of_server,struct clientInfo clients[
 	}
 	return 0;
 }
-/*---------------------------------------------------------
-|	checks if the clients tries to ping itself        	   |
+/*--------------------------------------------------------------
+|	checks if the clients tries to ping itself             |
 |	input- destination client's name, source client's      |
-|		   name                                            |
+|		   name                                        |
 |	output- int (1 if client pings itself, 0 otherwise)    |
------------------------------------------------------------*/
+----------------------------------------------------------------*/
 int ifMsgToItself(char *dest_name,char *src_name){
 	if(strcmp(dest_name,src_name)==0) return 1;
 	return 0;
 }
-/*---------------------------------------------------------
-|	dequeues message form queue      	                   |
+/*--------------------------------------------------------------
+|	dequeues message form queue      	               |
 |	input- front & rear pointers, msg queue                |
 |	output- dequeued message                               |
------------------------------------------------------------*/
+----------------------------------------------------------------*/
 struct message dequeue(int *front, int *rear, struct message *msg_queue){
 	struct message msg ;
 	if(!(*front > *rear || *front == 100 || *front == -1)){
@@ -104,11 +104,11 @@ struct message dequeue(int *front, int *rear, struct message *msg_queue){
 	}
 	return msg;
 }
-/*---------------------------------------------------------
+/*--------------------------------------------------------------
 |	equeues a message     	                               |
 |	input- front & rear pointers, msg queue ,message  m    |
 |	output- void                                           |
------------------------------------------------------------*/
+----------------------------------------------------------------*/
 void enqueue(int *front, int *rear,  struct message *msg_queue,struct message m){
 	if(*rear ==99) return;
 	else{
@@ -117,11 +117,11 @@ void enqueue(int *front, int *rear,  struct message *msg_queue,struct message m)
 		if(*front == -1) *front =0;
 	}
 }
-/*---------------------------------------------------
+/*--------------------------------------------------------
 |	Display all available users/clients to a client  |
 |	Input- NULL                                      |
 |	Output- client information                       |
-----------------------------------------------------*/
+---------------------------------------------------------*/
 void showUsers(struct clientInfo clients[],int no_of_server,int newsock_fd,int myid){
 	int n;
 	char buffer[BUF_SZ];
@@ -146,13 +146,13 @@ void showUsers(struct clientInfo clients[],int no_of_server,int newsock_fd,int m
 		bzero(buffer,BUF_SZ);
 	}
 }
-/*---------------------------------------------------
-|	broadcasts "disconnecting" msg to all connected  |
-|   clients when any client disconnects              |
-|	Input- array of connected clients,front & rear   |
-|		   pointers, msg_queue                       |
-|	Output- void                                     |
-----------------------------------------------------*/
+/*---------------------------------------------------------
+|   broadcasts "disconnecting" msg to all connected      |
+|   clients when any client disconnects                  |
+|   Input- array of connected clients,front & rear       |
+|		   pointers, msg_queue                   |
+|    Output- void                                        |
+----------------------------------------------------------*/
 void broadcast(struct clientInfo clients[],int no_of_server,char *myCliName,int *front, int *rear,  struct message *msg_queue){
 	struct message m;
 	strcpy(m.s_name,myCliName);
