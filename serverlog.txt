@@ -1,0 +1,7 @@
+client3|client1|1485415654|dghc
+client3|client2|1485415658|hii
+client3|client1|1485415660|IS DISCONNECTED
+client3|client2|1485415660|IS DISCONNECTED
+client2|client1|1485415662|IS DISCONNECTED
+client4|client1|1485415681|IS DISCONNECTED
+client1|client4|1485415673|djhgc
