@@ -39,7 +39,6 @@ int main(){
 	size_t size;
 	
 	sockfd = socket(AF_INET,SOCK_STREAM,0);
-	//fcntl(sockfd, F_SETFL, O_NONBLOCK);
 	int reuse = 1;
 	setsockopt(sockfd, SOL_SOCKET, SO_REUSEPORT|SO_REUSEADDR, (const char*)&reuse, sizeof(reuse));
 	if(sockfd == -1) {printf("error:socket formation\n"); return 0;}
@@ -79,6 +78,7 @@ int main(){
 				if(i==0){
 					//read server reply
 					n =read(sockfd,buffer,BUF_SZ);
+					if(n==0){printf("SERVER DISCONNECTED\n");exit(0);}
 					printf("%s",buffer);
 					fflush(NULL);
 					bzero(buffer,BUF_SZ);

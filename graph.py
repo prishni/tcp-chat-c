@@ -14,8 +14,18 @@ for line in f:
 		data[message[0]]=data[message[0]]+len(message[3])
 for key in data:
 	print key, data[key]
-#plt.plot(data.values())
-#plt.show()
+
+objects = data.keys()
+y_pos = np.arange(len(objects))
+performance = data.values()
+ 
+plt.bar(y_pos, performance, align='center', alpha=0.5)
+plt.xticks(y_pos, objects)
+plt.xlabel('Clients')
+plt.ylabel('Bytes/Characters send')
+plt.title('Server Load Plot')
+ 
+plt.show()
 f.close()
 
 #generating 2D matrix
@@ -36,6 +46,8 @@ with open("messagelog.csv", "wb") as f:
 
 #generating heapmap
 m =np.array(mat)
-h  = plt.pcolor(m, cmap = matplotlib.cm.autumn)
+h  = plt.pcolor(m, cmap = matplotlib.cm.Blues)
+plt.xticks(y_pos, objects)
+plt.yticks(y_pos, objects)
 plt.colorbar()
 plt.show()

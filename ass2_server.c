@@ -217,7 +217,7 @@ int main(){
 	*rear =-1;
 	sem_t *qsem = sem_open("/qsem",O_CREAT|O_EXCL,0644,1);
 	sem_t *fsem = sem_open("/fsem",O_CREAT|O_EXCL,0644,1);
-	FILE *fp =fopen("serverlog.txt","w");
+	FILE *fp =fopen("serverlog.txt","a");
 	signal(SIGINT, sighandler);
 	for(;;)
 	{
