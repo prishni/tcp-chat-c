@@ -120,7 +120,9 @@ void enqueue(int *front, int *rear,  struct message *msg_queue,struct message m,
 	else{
 		msg_queue[(*rear)+1] = m;
 		time_t tm =time(NULL);
-		fprintf(fp, "Sender: %s , Receiver: %s , Time Stamp %s Message : %s",m.s_name,m.r_name,ctime(&tm),m.msg);
+		char *mm=m.msg;
+		mm[strlen(mm)-1]='\0';
+		fprintf(fp, "%s|%s|%ld|%s",m.s_name,m.r_name,tm,mm);
 		(*rear)++;
 		if(*front == -1) *front =0;
 	}
@@ -142,7 +144,7 @@ void showUsers(struct clientInfo clients[],int no_of_server,int newsock_fd,int m
 			strcat(buffer,input);
 			bzero(input,BUF_SZ);
 			flag=1;
-		}
+		}	
 	}
 	if(flag==0){
 		//if only one client is connected(itself)
@@ -179,7 +181,7 @@ void broadcast(struct clientInfo clients[],int no_of_server,char *myCliName,int 
 
 int main(){
 
-	int port_no = 5000;
+	int port_no = 5001;
 	int sock_fd = socket(AF_INET,SOCK_STREAM,0);
 	if(sock_fd ==-1){printf("error:socket formation\n"); return 0;}
 	fcntl(sock_fd, F_SETFL, O_NONBLOCK);
@@ -202,7 +204,7 @@ int main(){
 	int *rear =(int *)shmat(shmid,NULL,0);
 	shmid = shmget(IPC_PRIVATE,sizeof(clientInfo)*5, IPC_CREAT | 0666);
 	struct clientInfo *clients =(struct clientInfo*)shmat(shmid,NULL,0);
-	shmid = shmget(IPC_PRIVATE,sizeof(message)*1000, IPC_CREAT | 0666);
+	shmid = shmget(IPC_PRIVATE,sizeof(message)*100, IPC_CREAT | 0666);
 	struct message *msg_queue =(struct message *)shmat(shmid,NULL,0);
 	shmid = shmget(IPC_PRIVATE,sizeof(int)*1, IPC_CREAT | 0666);
 	int *no_of_server =(int *)shmat(shmid,NULL,0);
@@ -275,7 +277,7 @@ int main(){
 								//fprintf(fp,"%s with id %d is disconnected\n\n",myCliName,clients[myclient].id);
 								clients[myclient].id =-1;
 								bzero(buffer,BUF_SZ);
-								char msg[30]= "IS DISCONNECTED\n";
+								char msg[30]= "IS DISCONNECTED\n\n";
 								broadcast(clients,*no_of_server,myCliName,front,rear,msg_queue,msg,clients[myclient].id,fp);
 								close(sock_fd);
 								return 0;

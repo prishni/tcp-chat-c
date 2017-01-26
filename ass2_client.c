@@ -32,7 +32,7 @@ void sighandler(int sig_num)
 }
 int main(){
 
-	int portno = 5000;
+	int portno = 5001;
 	int n;
 	char buffer[BUF_SZ];
 	char *input = NULL;
