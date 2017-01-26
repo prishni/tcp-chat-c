@@ -24,7 +24,7 @@ void sighandler(int sig_num)
 		
 		printf("in sig handler\n");
 		char buffer[BUF_SZ];
-		printf("27[1A\r%c[2K\r",27);
+		printf("%c[1A%c[2K\r",27,27);
         sprintf(buffer, "%s", "-1");
         int n = write(sockfd,buffer,BUF_SZ);
 		bzero(buffer,BUF_SZ);
@@ -67,6 +67,10 @@ int main(){
 	};
 	signal(SIGINT, sighandler);
 	printf("\r%c[2K",27);
+	printf("1.broadcast:<msg>     -- TO BROADCAST MSG \n");
+	printf("2.showUsers           -- TO DISPLAY ALL CONNECTED CLIENTS \n");
+	printf("3.<client_name>:<msg> -- TO MESSAGE A PARTICULAR CLIENT \n");
+	printf("4.press ctrl+c        -- TO DISCONNECT CLIENT \n\n");
 	while(1){
 		poll(fds,2,-1);
 		int i;
@@ -83,8 +87,8 @@ int main(){
 					//take user input and send to the server
 					getline(&input,&size,stdin);
 					if(!(strcmp(input,"showUsers\n")==0) && !(strcmp(input,"broadcast\n")==0)){
-						printf("27[2A%c[2K\r", 27);
-						printf("                   %s\n", input);
+						printf("%c[1A%c[2K\r",27,27);
+						printf("                                     %s\n", input);
 					}
 					sprintf(buffer, "%s", input);
 					n = write(sockfd,buffer,BUF_SZ);

@@ -59,14 +59,6 @@ int generateClientid(){
   	return random_number;
 }
 /*--------------------------------------------------------------
-|	generates a randon name for the client                 |
-|	input- NULL                                            |
-|	output- char array                                     |
-----------------------------------------------------------------*/
-char * generateClientname(){
-
-}
-/*--------------------------------------------------------------
 |	checks if there is message for client in yhe queue     |
 |	input- msg queue,front pointer, client name(self)      |
 |	output- int                                            |
@@ -146,7 +138,7 @@ void showUsers(struct clientInfo clients[],int no_of_server,int newsock_fd,int m
 	int i,flag=0;
 	for(i=1;i<=no_of_server ;i++){
 		if(clients[i].id!=-1 && clients[i].id != myid){
-			sprintf(input,"  CLIENT%d:-\n  ID= %d\n  NAME= %s\n\n",i,clients[i].id,clients[i].name);
+			sprintf(input,"  %d. CLIENT%d:-\n  ID= %d\n  NAME= %s\n\n",i,i,clients[i].id,clients[i].name);
 			strcat(buffer,input);
 			bzero(input,BUF_SZ);
 			flag=1;
@@ -158,6 +150,9 @@ void showUsers(struct clientInfo clients[],int no_of_server,int newsock_fd,int m
 		bzero(buffer,BUF_SZ);
 	}
 	else{
+		n = write(newsock_fd,buffer,BUF_SZ);
+		bzero(buffer,BUF_SZ);
+		sprintf(buffer,"----------------------------------------------------------------\n",BUF_SZ);
 		n = write(newsock_fd,buffer,BUF_SZ);
 		bzero(buffer,BUF_SZ);
 	}
@@ -257,7 +252,7 @@ int main(){
 				strcpy(clients[*no_of_server].name,myCliName);
 				clients[*no_of_server].fd=newsock_fd;
 				clients[*no_of_server].timestamp= time(NULL);
-				sprintf(buffer,"\n WELCOME, YOU ARE CONNECTED \n ID = %d\n NAME = %s \n TIME STAMP = %s ",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
+				sprintf(buffer,"\n WELCOME, YOU ARE CONNECTED \n ID = %d\n NAME = %s \n TIME STAMP = %s ----------------------------------------------------------------\n",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
 				n = write(newsock_fd,buffer,BUF_SZ);
 				bzero(buffer,BUF_SZ);
 				printf("A client connected with\n Id = %d\n Name = %s \n TimeStamp = %s\n",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
@@ -270,14 +265,14 @@ int main(){
 								bzero(buffer,BUF_SZ);
 								showUsers(clients,*no_of_server,newsock_fd,clients[myclient].id);
 							}
-							if(strncmp("broadcast:",buffer,strlen("broadcast:"))==0){
+							else if(strncmp("broadcast:",buffer,strlen("broadcast:"))==0){
 								char msg[BUF_SZ];
 								sprintf(msg,"%s\n",buffer+strlen("broadcast:"));
 								broadcast(clients,*no_of_server,myCliName,front,rear,msg_queue,msg,clients[myclient].id,fp);
 								bzero(buffer,BUF_SZ);
 							}
 							else if(strncmp("-1",buffer,BUF_SZ)==0){
-								printf("%s with id %d is disconnected\n\n",myCliName,clients[myclient].id);
+								printf("%s with id %d is DISCONNECTED\n\n",myCliName,clients[myclient].id);
 								//fprintf(fp,"%s with id %d is disconnected\n\n",myCliName,clients[myclient].id);
 								clients[myclient].id =-1;
 								bzero(buffer,BUF_SZ);
@@ -287,15 +282,16 @@ int main(){
 								return 0;
 							}
 							else{
-								if(!strchr(buffer,':')){
-									sprintf(buffer,"%s","please provide text in this format client_name: <msg>\n");
+								if(!strchr(buffer,':') ){
+									//printf("input -%s",buffer );
+									sprintf(buffer,"%s","                                     PLZ PEOVIDE INPUT IN THIS FORMAT client_name:<msg>\n");
 									write(newsock_fd,buffer,BUF_SZ);
 									bzero(buffer,BUF_SZ);
 								}
 								else{
 									int index= strcspn(buffer,":");
-									if(index==0){
-										sprintf(buffer,"%s","please provide a client name\n");
+									if(index==0 && strchr(buffer,':')  ){
+										sprintf(buffer,"%s","                                     PLZ PROVIDE A CLIENT NAME\n");
 										write(newsock_fd,buffer,BUF_SZ);
 										bzero(buffer,BUF_SZ);
 									}
@@ -314,7 +310,7 @@ int main(){
 										m.r_id=-1;
 										
 										if(ifMsgToItself(dest_name,src_name)){
-											sprintf(buffer,"%s","YOU CANNOT PING YOURSELF\n");
+											sprintf(buffer,"%s","                                     YOU CANNOT PING YOURSELF\n");
 											write(newsock_fd,buffer,BUF_SZ);
 											bzero(buffer,BUF_SZ);
 										}
@@ -324,7 +320,7 @@ int main(){
 											sem_post(qsem);
 										}
 										else{
-											sprintf(buffer,"%s","THIS CLIENT DOESNOT EXISTS OR IS NO MORE ONLINE\n");
+											sprintf(buffer,"%s","                                     THIS CLIENT DOESNOT EXISTS OR IS NO MORE ONLINE\n");
 											write(newsock_fd,buffer,BUF_SZ);
 											bzero(buffer,BUF_SZ);
 										}
