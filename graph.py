@@ -1,6 +1,8 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import csv
+import matplotlib
+
 f = open("serverlog.txt",'r');
 data = {}
 w=5
@@ -15,6 +17,8 @@ for key in data:
 #plt.plot(data.values())
 #plt.show()
 f.close()
+
+#generating 2D matrix
 mat= [[0 for x in range(w)] for y in range(w)] 
 f=open("serverlog.txt",'r')
 for line in f:
@@ -25,6 +29,13 @@ for line in f:
 f.close()
 print mat
 
+#generating csv file
 with open("messagelog.csv", "wb") as f:
     writer = csv.writer(f)
     writer.writerows(mat)
+
+#generating heapmap
+m =np.array(mat)
+h  = plt.pcolor(m, cmap = matplotlib.cm.autumn)
+plt.colorbar()
+plt.show()
