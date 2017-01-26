@@ -46,6 +46,7 @@ void sighandler(int sig_num)
 		char buffer[BUF_SZ];
 		printf("\r%c[2K",27);
         sem_unlink("/qsem");
+        sem_unlink("/fsem");
         exit(0);
 }
 /*--------------------------------------------------------------
@@ -118,11 +119,14 @@ struct message dequeue(int *front, int *rear, struct message *msg_queue){
 void enqueue(int *front, int *rear,  struct message *msg_queue,struct message m,FILE *fp){
 	if(*rear ==99) return;
 	else{
+		sem_t *fsem =sem_open("/fsem",0);
 		msg_queue[(*rear)+1] = m;
 		time_t tm =time(NULL);
 		char *mm=m.msg;
 		mm[strlen(mm)-1]='\0';
+		sem_wait(fsem);
 		fprintf(fp, "%s|%s|%ld|%s",m.s_name,m.r_name,tm,mm);
+		sem_post(fsem);
 		(*rear)++;
 		if(*front == -1) *front =0;
 	}
@@ -212,6 +216,7 @@ int main(){
 	*front =-1;
 	*rear =-1;
 	sem_t *qsem = sem_open("/qsem",O_CREAT|O_EXCL,0644,1);
+	sem_t *fsem = sem_open("/fsem",O_CREAT|O_EXCL,0644,1);
 	FILE *fp =fopen("serverlog.txt","w");
 	signal(SIGINT, sighandler);
 	for(;;)
@@ -300,7 +305,7 @@ int main(){
 										char *src_name = myCliName;
 										char dest_name[30],msg[BUF_SZ];
 										memcpy(dest_name,&buffer,index);
-										sprintf(msg,"%s",buffer+index+1);
+										sprintf(msg,"%s\n",buffer+index+1);
 										dest_name[index]='\0';
 										strcpy(m.msg,msg);
 										strcpy(m.s_name,src_name);
