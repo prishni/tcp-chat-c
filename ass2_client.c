@@ -32,7 +32,7 @@ void sighandler(int sig_num)
 }
 int main(){
 
-	int portno = 5001;
+	int portno = 5010;
 	int n;
 	char buffer[BUF_SZ];
 	char *input = NULL;
@@ -57,6 +57,9 @@ int main(){
 		printf("%s\n", buffer);
 		exit(0);
 	}
+	printf("			THE REDHAT CHAT APPLICATION\n");
+	printf("-----------------------------------------------------------------\n");
+	printf("-----------------------------------------------------------------\n\n");
 	printf("%s\n", buffer);
 	bzero(buffer,BUF_SZ);
 
@@ -69,7 +72,8 @@ int main(){
 	printf("1.broadcast:<msg>     -- TO BROADCAST MSG \n");
 	printf("2.showUsers           -- TO DISPLAY ALL CONNECTED CLIENTS \n");
 	printf("3.<client_name>:<msg> -- TO MESSAGE A PARTICULAR CLIENT \n");
-	printf("4.press ctrl+c        -- TO DISCONNECT CLIENT \n\n");
+	printf("4.press ctrl+c        -- TO DISCONNECT CLIENT \n");
+	printf("-----------------------------------------------------------------\n\n");
 	while(1){
 		poll(fds,2,-1);
 		int i;

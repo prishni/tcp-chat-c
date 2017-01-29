@@ -24,6 +24,7 @@
 struct clientInfo{
 	int id;
 	char name[30];
+	char randomname[30];
 	int fd;
 	time_t timestamp;
 };
@@ -56,9 +57,26 @@ void sighandler(int sig_num)
 ----------------------------------------------------------------*/
 int generateClientid(){
 	srand ( time(NULL) );
-  	int random_number = rand();
+  	int random_number = 10000+rand()%89999;
   	return random_number;
 }
+
+/*--------------------------------------------------------------
+|	generates a randon name for a client                   |
+|	input- client structure                                |
+|	output- void                                           |
+----------------------------------------------------------------*/
+void generaterandomname(struct clientInfo * c){
+	char charset[] = "abcdefghijklmnopqrstuvwxyz";
+    int i = 0;
+    while (i<10) {
+        size_t index = (double) rand() / RAND_MAX * (sizeof charset - 1);
+        c->randomname[i] = charset[index];
+        i++;
+    }
+    c->randomname[10] = '\0';
+}
+
 /*--------------------------------------------------------------
 |	checks if there is message for client in yhe queue     |
 |	input- msg queue,front pointer, client name(self)      |
@@ -144,7 +162,7 @@ void showUsers(struct clientInfo clients[],int no_of_server,int newsock_fd,int m
 	int i,flag=0;
 	for(i=1;i<=no_of_server ;i++){
 		if(clients[i].id!=-1 && clients[i].id != myid){
-			sprintf(input,"  %d. CLIENT%d:-\n  ID= %d\n  NAME= %s\n\n",i,i,clients[i].id,clients[i].name);
+			sprintf(input,"  %d. CLIENT%d:-\n     ID= %d\n     NAME= %s\n\n",i,i,clients[i].id,clients[i].randomname);
 			strcat(buffer,input);
 			bzero(input,BUF_SZ);
 			flag=1;
@@ -185,7 +203,7 @@ void broadcast(struct clientInfo clients[],int no_of_server,char *myCliName,int 
 
 int main(){
 
-	int port_no = 5001;
+	int port_no = 5010;
 	int sock_fd = socket(AF_INET,SOCK_STREAM,0);
 	if(sock_fd ==-1){printf("error:socket formation\n"); return 0;}
 	fcntl(sock_fd, F_SETFL, O_NONBLOCK);
@@ -251,14 +269,15 @@ int main(){
 				int n;
 				int myclient = *no_of_server;
 				char myCliName[30] ="client";
-				clients[*no_of_server].id=generateClientid()%100;
+				clients[*no_of_server].id=generateClientid();
+				generaterandomname(clients+(*no_of_server));
 				char temp[5];
 				sprintf(temp,"%d",myclient);
 				strcat(myCliName,temp);
 				strcpy(clients[*no_of_server].name,myCliName);
 				clients[*no_of_server].fd=newsock_fd;
 				clients[*no_of_server].timestamp= time(NULL);
-				sprintf(buffer,"\n WELCOME, YOU ARE CONNECTED \n ID = %d\n NAME = %s \n TIME STAMP = %s ----------------------------------------------------------------\n",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
+				sprintf(buffer,"\n WELCOME, YOU ARE CONNECTED \n ID = %d\n NAME = %s\n RANDOM_NAME = %s\n TIME STAMP = %s ----------------------------------------------------------------\n",clients[*no_of_server].id,clients[*no_of_server].name ,clients[*no_of_server].randomname ,ctime(&clients[*no_of_server].timestamp));
 				n = write(newsock_fd,buffer,BUF_SZ);
 				bzero(buffer,BUF_SZ);
 				printf("A client connected with\n Id = %d\n Name = %s \n TimeStamp = %s\n",clients[*no_of_server].id,clients[*no_of_server].name ,ctime(&clients[*no_of_server].timestamp));
