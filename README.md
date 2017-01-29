@@ -28,8 +28,7 @@
 4 To disconnect itself from the server, client has to press
 			ctrl+c
 			
-================================================:-
- IMPLEMENTATION DETAILS:-
+# IMPLEMENTATION DETAILS:-
 ================================================:-
 
 I CLIENT'S SIDE:-
