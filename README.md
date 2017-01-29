@@ -41,23 +41,20 @@
 
 I CLIENT'S SIDE:-
 ----------------
-	1 Uses poll system call to check that if there is an incomming message then is it comming from server or the 		client(user).
-		(poll system call is similar to select system call)
-		
-	2 If the incomming message is from terminal(i.e client) the send the meaasage to the server.
-	
-	3 Else if message if from the server then just print the incomming message.
+1. Uses poll system call to check that if there is an incomming message then is it comming from server or the 		client(user).(poll system call is similar to select system call)			
+2. If the incomming message is from terminal(i.e client) the send the meaasage to the server.
+3. Else if message if from the server then just print the incomming message.
 	
 II SERVER'S SIDE:
 ----------------
-	1 Server will fork a new process for each client that is getting connected.
-	2 Server keeps on checking the message queue and delivers to the client if there is message for its client.
-	3 If client sends any data to server , server will fperform tasks accordingly
-		i   Display connected clients to the client(showUsers).
-		ii  Send message other clients
-		iii Broadcast messages
-		iv  broadcast message if any client gets disconnected.
-		(sending messages implies enqueuing messages to the message queue.)
+1. Server will fork a new process for each client that is getting connected.
+2. Server keeps on checking the message queue and delivers to the client if there is message for its client.
+3. If client sends any data to server , server will fperform tasks accordingly
+	i.   Display connected clients to the client(showUsers).
+	ii.  Send message other clients
+	iii. Broadcast messages
+	iv.  broadcast message if any client gets disconnected.
+	(sending messages implies enqueuing messages to the message queue.)
 
 ===========================================================================================================================
 ===========:-
