@@ -93,13 +93,13 @@ TEST CASES:-
 |	3		   | message		| Please provide a client name.                            | Please provide a client name.                              | PASSED |
 |	4	       | client1:msg	| The client is no more connected.                         | The client is no more connected.                           | PASSED |
 |	5		   | xyz:msg		| The client doesn't exists.                               | The client doesn't exists.                                 | PASSED |
-|	6		   | client1msg		| Please provide input in this format <client_name>:<msg>. | Please provide input in this format <client_name>:<msg>.   | PASSED |
+|	6		   | client1msg		| Please provide input in this format client_name:msg. | Please provide input in this format client_name:msg.   | PASSED |
 |	7		   | client1:msg	| You cannot ping yourself..                               | You cannot ping yourself.                                  | PASSED |
-|	8		   | broadcast:msg	| <clientName>: Message.                                   | <clientName>: Message.                                     | PASSED |
+|	8		   | broadcast:msg	| clientName: Message.                                   | clientName: Message.                                     | PASSED |
 |	9		   | void			| Connection Limit Exceeded.                               | Connection Limit Exceeded.                                 | PASSED |
 |	10		   | void			| Connection Refused.                                      | Connection Refused.                                        | PASSED |
 |	11		   | showUsers		| No other client connected.                               | No other client connected.                                 | PASSED |
-|	12		   | ctrl+c			| <client_name>: Is Disconnected.      					   | <client_name>: Is Disconnected.						    | PASSED |
+|	12		   | ctrl+c			| client_name: Is Disconnected.      					   | client_name: Is Disconnected.						    | PASSED |
 
 
 ===================================================================================================================================================================
