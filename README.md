@@ -21,12 +21,16 @@
 -----------------------------
 1 To send message the client has to follow a particular format and that is
 			client name:msg
+			
 2 To broadcast messages the client has to provide message in the format
 			broadcast:msg
+			
 3 To Query all connected clients, the client has to use the command
 			showUsers
+			
 4 To disconnect itself from the server, client has to press
 			ctrl+c
+			
 			
 ### IMPLEMENTATION DETAILS:-
 ================================================:-
