@@ -1,45 +1,76 @@
-client2|client1|1485450602| me too
-client2|client3|1485450602| me too
-client2|client4|1485450602| me too
-client2|client1|1485450620|IS DISCONNECTED
-client2|client3|1485450620|IS DISCONNECTED
-client2|client4|1485450620|IS DISCONNECTED
-client1|client2|1485450613| hiiii
-client1|client3|1485450622|IS DISCONNECTED
-client1|client4|1485450622|IS DISCONNECTED
-client3|client1|1485450588| i m here
-client3|client2|1485450588| i m here
-client3|client4|1485450588| i m here
-client3|client4|1485450624|IS DISCONNECTED
-client4|client1|1485450545| hii
-client4|client2|1485450545| hii
-client4|client3|1485450545| hii
-client4|client1|1485450575| are u all there?
-client4|client2|1485450575| are u all there?
-client4|client3|1485450575| are u all there?
-client3|client1|1485451117|wjffgebcghebgfvhyjc
-client3|client2|1485451117|wjffgebcghebgfvhyjc
-client3|client4|1485451117|wjffgebcghebgfvhyjc
-client3|client5|1485451117|wjffgebcghebgfvhyjc
-client3|client1|1485451119|IS DISCONNECTED
-client3|client2|1485451119|IS DISCONNECTED
-client3|client4|1485451119|IS DISCONNECTED
-client3|client5|1485451119|IS DISCONNECTED
-client2|client1|1485451093|kjcbjhvfbjhbvfhdbfhvj
-client2|client3|1485451093|kjcbjhvfbjhbvfhdbfhvj
-client2|client4|1485451093|kjcbjhvfbjhbvfhdbfhvj
-client2|client5|1485451093|kjcbjhvfbjhbvfhdbfhvj
-client2|client1|1485451122|IS DISCONNECTED
-client2|client4|1485451122|IS DISCONNECTED
-client2|client5|1485451122|IS DISCONNECTED
-client1|client2|1485451081|hii everyone
-client1|client3|1485451081|hii everyone
-client1|client4|1485451081|hii everyone
-client1|client5|1485451081|hii everyone
-client1|client4|1485451123|IS DISCONNECTED
-client1|client5|1485451123|IS DISCONNECTED
-client4|client5|1485451125|IS DISCONNECTED
-client5|client1|1485451105|khfvgejhybfgvjuehbvjhebvjhedb
-client5|client2|1485451105|khfvgejhybfgvjuehbvjhebvjhedb
-client5|client3|1485451105|khfvgejhybfgvjuehbvjhebvjhedb
-client5|client4|1485451105|khfvgejhybfgvjuehbvjhebvjhedb
+client2|client1|Thu Jan 26 23:13:20 2017| jane kya mujhe hua h..
+client2|client3|Thu Jan 26 23:14:35 2017| upload whatever we have in github
+client2|client1|Thu Jan 26 23:14:38 2017|IS DISCONNECTED
+client2|client3|Thu Jan 26 23:14:38 2017|IS DISCONNECTED
+client2|client4|Thu Jan 26 23:14:38 2017|IS DISCONNECTED
+client2|client5|Thu Jan 26 23:14:38 2017|IS DISCONNECTED
+client1|client4|Thu Jan 26 23:13:37 2017| nana nanananananananananan
+client1|client3|Thu Jan 26 23:14:40 2017|IS DISCONNECTED
+client1|client4|Thu Jan 26 23:14:40 2017|IS DISCONNECTED
+client1|client5|Thu Jan 26 23:14:40 2017|IS DISCONNECTED
+client5|client1|Thu Jan 26 23:11:53 2017|jeyhrgfbhejrbhgefbvhgebv
+client5|client2|Thu Jan 26 23:11:53 2017|jeyhrgfbhejrbhgefbvhgebv
+client5|client3|Thu Jan 26 23:11:53 2017|jeyhrgfbhejrbhgefbvhgebv
+client5|client4|Thu Jan 26 23:11:53 2017|jeyhrgfbhejrbhgefbvhgebv
+client5|client1|Thu Jan 26 23:12:03 2017|jhbcjhbfvjhec
+client5|client2|Thu Jan 26 23:12:03 2017|jhbcjhbfvjhec
+client5|client3|Thu Jan 26 23:12:03 2017|jhbcjhbfvjhec
+client5|client4|Thu Jan 26 23:12:03 2017|jhbcjhbfvjhec
+client5|client3|Thu Jan 26 23:14:42 2017|IS DISCONNECTED
+client5|client4|Thu Jan 26 23:14:42 2017|IS DISCONNECTED
+client4|client1|Thu Jan 26 23:12:18 2017| i m in love, i m in love
+client4|client2|Thu Jan 26 23:12:18 2017| i m in love, i m in love
+client4|client3|Thu Jan 26 23:12:18 2017| i m in love, i m in love
+client4|client5|Thu Jan 26 23:12:18 2017| i m in love, i m in love
+client4|client3|Thu Jan 26 23:14:43 2017|IS DISCONNECTED
+client3|client1|Thu Jan 26 23:12:54 2017| kitne dafe dil ne kaha.. dil ki suni kitne dafe
+client3|client2|Thu Jan 26 23:12:54 2017| kitne dafe dil ne kaha.. dil ki suni kitne dafe
+client3|client4|Thu Jan 26 23:12:54 2017| kitne dafe dil ne kaha.. dil ki suni kitne dafe
+client3|client5|Thu Jan 26 23:12:54 2017| kitne dafe dil ne kaha.. dil ki suni kitne dafe
+client2|client1|Thu Jan 26 23:16:48 2017| hiihwdbcjhdbcjbvhfjfbhvhejbvkjheb
+client2|client1|Thu Jan 26 23:16:55 2017|fkhbvfjdbhvjdfbjhbfvjuhf vh
+client2|client1|Thu Jan 26 23:17:41 2017|IS DISCONNECTED
+client2|client3|Thu Jan 26 23:17:41 2017|IS DISCONNECTED
+client2|client4|Thu Jan 26 23:17:41 2017|IS DISCONNECTED
+client2|client5|Thu Jan 26 23:17:41 2017|IS DISCONNECTED
+client1|client2|Thu Jan 26 23:17:04 2017|kfgfvubhyjhfbjcvubhfgvuhebfvhujbfjbhv
+client1|client3|Thu Jan 26 23:17:42 2017|IS DISCONNECTED
+client1|client4|Thu Jan 26 23:17:42 2017|IS DISCONNECTED
+client1|client5|Thu Jan 26 23:17:42 2017|IS DISCONNECTED
+client5|client1|Thu Jan 26 23:19:03 2017|jhfgbjerhfbhjebfvhjerfvbjh
+client5|client2|Thu Jan 26 23:19:03 2017|jhfgbjerhfbhjebfvhjerfvbjh
+client5|client3|Thu Jan 26 23:19:03 2017|jhfgbjerhfbhjebfvhjerfvbjh
+client5|client4|Thu Jan 26 23:19:03 2017|jhfgbjerhfbhjebfvhjerfvbjh
+client5|client2|Thu Jan 26 23:20:16 2017|khfbvjfhbjufhybvujhbfvjhf
+client4|client1|Thu Jan 26 23:19:15 2017|khfbvjvjfvhrbvjkf vnjkhfvjkn bv
+client4|client2|Thu Jan 26 23:19:15 2017|khfbvjvjfvhrbvjkf vnjkhfvjkn bv
+client4|client3|Thu Jan 26 23:19:15 2017|khfbvjvjfvhrbvjkf vnjkhfvjkn bv
+client4|client5|Thu Jan 26 23:19:15 2017|khfbvjvjfvhrbvjkf vnjkhfvjkn bv
+client4|client1|Thu Jan 26 23:19:57 2017|jhbfcjb vjhbfvjhbf
+client4|client3|Thu Jan 26 23:20:02 2017|kfhbvjbfhvjufhv
+client2|client4|Thu Jan 26 23:19:45 2017|fvhbfjbvhjhbbfv
+client3|client5|Thu Jan 26 23:19:29 2017|fhvbjrhbfvhjrfbv
+client3|client5|Thu Jan 26 23:19:34 2017|fjvhbfhvjhfebvhjefbv
+client5|client1|Thu Jan 26 23:21:48 2017|hgevhgfgndvcdhgvcehgdchgevdc
+client4|client3|Thu Jan 26 23:22:12 2017|fjcbefbgcvujhebfvjehgfybvjhbfjhbvfjhbdfhvb
+client4|client3|Thu Jan 26 23:22:18 2017|hdgbjehbcjhbfvjhbvfjhbjvhbdjfvhbud
+client2|client3|Thu Jan 26 23:21:59 2017|wehdfuhebfcevjhbvfjhfegbvj
+client5|client1|1485696868|IS DISCONNECTED
+client5|client2|1485696868|IS DISCONNECTED
+client5|client3|1485696868|IS DISCONNECTED
+client5|client4|1485696868|IS DISCONNECTED
+client4|client1|1485696869|IS DISCONNECTED
+client4|client2|1485696869|IS DISCONNECTED
+client4|client3|1485696869|IS DISCONNECTED
+client3|client1|1485696870|IS DISCONNECTED
+client3|client2|1485696870|IS DISCONNECTED
+client2|client1|1485696871|IS DISCONNECTED
+client2|client1|1485696915|IS DISCONNECTED
+client1|client2|1485698918|IS DISCONNECTED
+client3|client1|1485699064|IS DISCONNECTED
+client3|client2|1485699064|IS DISCONNECTED
+client3|client4|1485699064|IS DISCONNECTED
+client4|client1|1485699073|IS DISCONNECTED
+client4|client2|1485699073|IS DISCONNECTED
+client2|client1|1485699078|IS DISCONNECTED
+client2|client1|1485700020|IS DISCONNECTED

@@ -69,6 +69,7 @@ int main(){
 	};
 	signal(SIGINT, sighandler);
 	printf("\r%c[2K",27);
+	printf("OPTIONS:\n\n");
 	printf("1.broadcast:<msg>     -- TO BROADCAST MSG \n");
 	printf("2.showUsers           -- TO DISPLAY ALL CONNECTED CLIENTS \n");
 	printf("3.<client_name>:<msg> -- TO MESSAGE A PARTICULAR CLIENT \n");
