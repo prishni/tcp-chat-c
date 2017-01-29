@@ -1,0 +1,93 @@
+																   TEST REPORT:-
+																   ------------
+===============================================================================================================================================
+
+=============================================:-
+ THE REDHAT CHAT APPLICATION:-
+=============================================:-
+
+* This is a client server application where multiple clients can connect to the server and can chat with each other.
+* Server can support only 5 clients to connect.
+* As a client connects, a random id, random name with time stamp value is given to the client.
+* clients can:-
+	1. Query server to display all connected clients.
+	2. Send message to other clients using their name.
+	3. Broadcast messages to all the clients connected at that instance.
+	4. Disconnect itself from the server.
+* Whenever a client disconnects it informs all other clients and the server apriori.
+* If in case server disconnects , it will disconnect all its associated clients.
+	
+-----------------------------
+ CLIENT'S FUNCTIONALITIES:-
+-----------------------------
+* To send message the client has to follow a particular format and that is
+			<client name>:<msg>
+* To broadcast messages the client has to provide message in the format
+			broadcast:<msg>
+* To Query all connected clients, the client has to use the command
+			showUsers
+* To disconnect itself from the server, client has to press
+			ctrl+c
+			
+================================================:-
+ IMPLEMENTATION DETAILS:-
+================================================:-
+
+* CLIENT'S SIDE:
+----------------
+	* Uses poll system call to check that if there is an incomming message then is it comming from server or the client(user).
+		(poll system call is similar to select system call)
+	* If the incomming message is from terminal(i.e client) the send the meaasage to the server.
+	* Else if message if from the server then just print the incomming message.
+	
+* SERVER'S SIDE:
+----------------
+	* Server will fork a new process for each client that is getting connected.
+	* Server keeps on checking the message queue and delivers to the client if there is message for its client.
+	* If client sends any data to server , server will fperform tasks accordingly
+		* Display connected clients to the client(showUsers).
+		* Send message other clients
+		* Broadcast messages
+		* broadcast message if any client gets disconnected.
+		(sending messages implies enqueuing messages to the message queue.)
+
+===================================================================================================================================================
+===========:-
+TEST CASES:-
+===========:-
+------------------------------------------------------------------------------------
+| TestCase Id			| TestCase                                                 |
+------------------------------------------------------------------------------------
+|	1					| Trying to connect when the server is not running.
+|	2					| Server disconnected in between.
+|	3					| No client name provided by the user.
+|	4					| Client name provided is no more connected.
+|	5					| Client name provided doesn't exists.
+|	6					| Colon(:) not provided after the client's name.
+|	7					| Client messaging to itself.
+|	8					| Broadcasting meassages to all connected clients.
+|	9					| More than 5 clients trying to connect to the server.
+|	10					| Port number already in use.
+|	11					| Query ShowUsers when no users are connected.
+|	12					|
+Below are the test cases which were taken care of:-
+
+++++++++++++++TEST CASES+++++++++++++++++++++++++++++++++++++++++++++++++++TEST CASES++++++++++++++++++++++++++++++++TEST CASES++++++++++++++++++++
+___________________________________________________________________________________________________________________________________________________
+---------------------------------------------------------------------------------------------------------------------------------------------------
+|     Input                                | Output                                                             |Result
+___________________________________________________________________________________________________________________________________________________
+---------------------------------------------------------------------------------------------------------------------------------------------------
+
+|     ;			                           | InputText and Parttern can't have length zero						| Passed |
+|     Inputtext;                           | provide a pattern wuth Inputtext                                   | Passed |
+|     ;patt					               | Inputtext can not have length zero									| Passed |
+|     qwerty;;ty                           | Can't have more than one semicolon                                 | Passed |
+|     qwerty5;gg                           | Inputtext can't have special characters                            | Passed |
+|     qwerty; er                           | Pattern can't have special characters                              | Passed |
+|     qqqqqqqqqqqqqqqqqqq;qq               | length exceeded                                                    | Passed |
+|     asdasd;asdfgh                        | length exceeded                                                    | Passed |
+|     InputtextPattern                     | Missing semicolon                                                  | Passed |
+|     qwerrty;r                            | response = 2                                                       | Passed |
+__________________________________________________________________________________________________________________________________________________
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
