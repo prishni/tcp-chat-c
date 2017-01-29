@@ -1,12 +1,9 @@
 # Tcp-chat-c
 
-																   TEST REPORT:-
-																   ------------
+## TEST REPORT
 =======================================================================================================================
 
-=============================================:-
- THE REDHAT CHAT APPLICATION:-
-=============================================:-
+### THE REDHAT CHAT APPLICATION:-
 
 * This is a client server application where multiple clients can connect to the server and can chat with each other.
 * Server can support only 5 clients to connect.
@@ -58,9 +55,9 @@
 TEST CASES:-
 ===========:-
 
---------------------------------------------------------------------------------
+
 | TEST CASE ID			| TEST CASE                                                |
---------------------------------------------------------------------------------
+| ------------------------------|-----------------------------------------------	|
 |	1					        | Trying to connect when the server is not running.		     |
 |	2					        | Server disconnected in between.                          |
 |	3					        | No client name provided by the user.                     |
@@ -72,16 +69,14 @@ TEST CASES:-
 |	9					        | More than 5 clients trying to connect to the server.     |
 |	10				        | Port number already in use.                              |
 |	11				        | Query ShowUsers when no users are connected.             |
-|	12				        | Client Disconnects     								                   |
---------------------------------------------------------------------------------
+|	12				        | Client Disconnects     				|
 
 Below are the test cases which were taken care of:-
 
 TEST CASES:-
 
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | TestCase Id  | INPUT			| EXPECTED OUTPUT						                   | ACTUAL OUTPUT				                                | RESULT |
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|------------|--------------|----------------|----------------|-------------------------------------------------------------------------------------------------------|
 |	1		   | void			| Connection Refused.		                               | Connection Refused.                                        | PASSED |
 |	2		   | void			| Server Disconnected.                                     | Server Disconnected.                                       | PASSED |
 |	3		   | message		| Please provide a client name.                            | Please provide a client name.                              | PASSED |
@@ -94,7 +89,7 @@ TEST CASES:-
 |	10		   | void			| Connection Refused.                                      | Connection Refused.                                        | PASSED |
 |	11		   | showUsers		| No other client connected.                               | No other client connected.                                 | PASSED |
 |	12		   | ctrl+c			| <client_name>: Is Disconnected.      					   | <client_name>: Is Disconnected.						    | PASSED |
-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 ===================================================================================================================================================================
 
