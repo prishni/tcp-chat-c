@@ -19,35 +19,35 @@
 -----------------------------
  CLIENT'S FUNCTIONALITIES:-
 -----------------------------
-* To send message the client has to follow a particular format and that is
-			<client name>:<msg>
-* To broadcast messages the client has to provide message in the format
-			broadcast:<msg>
-* To Query all connected clients, the client has to use the command
+1 To send message the client has to follow a particular format and that is
+			client name:msg
+2 To broadcast messages the client has to provide message in the format
+			broadcast:msg
+3 To Query all connected clients, the client has to use the command
 			showUsers
-* To disconnect itself from the server, client has to press
+4 To disconnect itself from the server, client has to press
 			ctrl+c
 			
 ================================================:-
  IMPLEMENTATION DETAILS:-
 ================================================:-
 
-* CLIENT'S SIDE:
+I CLIENT'S SIDE:-
 ----------------
-	* Uses poll system call to check that if there is an incomming message then is it comming from server or the client(user).
+	1 Uses poll system call to check that if there is an incomming message then is it comming from server or the 		client(user).
 		(poll system call is similar to select system call)
-	* If the incomming message is from terminal(i.e client) the send the meaasage to the server.
-	* Else if message if from the server then just print the incomming message.
+	2 If the incomming message is from terminal(i.e client) the send the meaasage to the server.
+	3 Else if message if from the server then just print the incomming message.
 	
-* SERVER'S SIDE:
+II SERVER'S SIDE:
 ----------------
-	* Server will fork a new process for each client that is getting connected.
-	* Server keeps on checking the message queue and delivers to the client if there is message for its client.
-	* If client sends any data to server , server will fperform tasks accordingly
-		* Display connected clients to the client(showUsers).
-		* Send message other clients
-		* Broadcast messages
-		* broadcast message if any client gets disconnected.
+	1 Server will fork a new process for each client that is getting connected.
+	2 Server keeps on checking the message queue and delivers to the client if there is message for its client.
+	3 If client sends any data to server , server will fperform tasks accordingly
+		i   Display connected clients to the client(showUsers).
+		ii  Send message other clients
+		iii Broadcast messages
+		iv  broadcast message if any client gets disconnected.
 		(sending messages implies enqueuing messages to the message queue.)
 
 ===========================================================================================================================
