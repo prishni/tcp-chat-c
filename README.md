@@ -36,7 +36,7 @@
 			ctrl+c
 			
 			
-### IMPLEMENTATION DETAILS:-
+#### IMPLEMENTATION DETAILS:-
 ================================================:-
 
 I CLIENT'S SIDE:-
@@ -52,9 +52,13 @@ II SERVER'S SIDE:
 3. If client sends any data to server , server will fperform tasks accordingly
 
 	i.   Display connected clients to the client(showUsers).
+	
 	ii.  Send message other clients
+	
 	iii. Broadcast messages
+	
 	iv.  broadcast message if any client gets disconnected.
+	
 	(sending messages implies enqueuing messages to the message queue.)
 
 ===========================================================================================================================
