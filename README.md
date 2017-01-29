@@ -20,15 +20,19 @@
  CLIENT'S FUNCTIONALITIES:-
 -----------------------------
 1 To send message the client has to follow a particular format and that is
+			
 			client name:msg
 			
 2 To broadcast messages the client has to provide message in the format
+			
 			broadcast:msg
 			
 3 To Query all connected clients, the client has to use the command
+			
 			showUsers
 			
 4 To disconnect itself from the server, client has to press
+			
 			ctrl+c
 			
 			
@@ -39,7 +43,9 @@ I CLIENT'S SIDE:-
 ----------------
 	1 Uses poll system call to check that if there is an incomming message then is it comming from server or the 		client(user).
 		(poll system call is similar to select system call)
+		
 	2 If the incomming message is from terminal(i.e client) the send the meaasage to the server.
+	
 	3 Else if message if from the server then just print the incomming message.
 	
 II SERVER'S SIDE:
